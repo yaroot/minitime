@@ -32,24 +32,24 @@ package object minitime {
   }
 
   implicit class RichDuration(val d: JDuration) extends AnyVal {
-    def toFiniteDuration = FiniteDuration(d.toNanos, NANOSECONDS)
+    def toFiniteDuration: FiniteDuration =
+      FiniteDuration(d.toNanos, NANOSECONDS)
   }
 
   implicit class Infix[L](val l: L) extends AnyVal {
-    def +[R](r: R)(implicit add: Add[L, R]) = add(l, r)
-    def -[R, C](r: R)(implicit subtract: Subtract[L, R, C]) = subtract(l, r)
-    def *(scalar: Int)(implicit multiply: Multiply[L]) = multiply(l, scalar)
-    def /[R, C](r: R)(implicit divide: Divide[L, R, C]) = divide(l, r)
+    def +[R](r: R)(implicit add: Add[L, R]): L = add(l, r)
+    def -[R, C](r: R)(implicit subtract: Subtract[L, R, C]): C = subtract(l, r)
+    def *(scalar: Int)(implicit multiply: Multiply[L]): L = multiply(l, scalar)
+    def /[R, C](r: R)(implicit divide: Divide[L, R, C]): C = divide(l, r)
 
-    def to[S](r: L)(implicit builder: TimeRangeBuilder[L, S]) = {
-      builder.build(l, r, true)
-    }
-    def till[S](r: L)(implicit builder: TimeRangeBuilder[L, S]) = {
-      builder.build(l, r, false)
-    }
+    def to[S](r: L)(implicit ev: TimeRangeBuilder[L, S]): TimeRange[L, S] =
+      ev.build(l, r, true)
+
+    def till[S](r: L)(implicit ev: TimeRangeBuilder[L, S]): TimeRange[L, S] =
+      ev.build(l, r, false)
   }
 
-  implicit def infixOrderingOps[T: Ordering](x: T) = {
+  implicit def infixOrderingOps[T: Ordering](x: T): Ordering[T]#Ops = {
     Ordering.Implicits.infixOrderingOps(x)
   }
 
