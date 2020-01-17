@@ -9,9 +9,11 @@ class SyntaxSpec extends FlatSpec {
   it should "plus one day to 2020/02/20" in {
     val localDate = LocalDate(2020, 2, 20)
 
-    val addOneDay = localDate + 1.day
+    val addOneDay  = localDate + 1.day
+    val addOneDay0 = 1.day + localDate
 
     assert(addOneDay == LocalDate(2020, 2, 21))
+    assert(addOneDay0 == LocalDate(2020, 2, 21))
   }
 
   it should "subtract one day from 2020/02/20" in {

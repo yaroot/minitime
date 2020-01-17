@@ -1,20 +1,26 @@
 package minitime
 
-trait Add[L, R] {
-  def apply(l: L, r: R): L
+trait Add[A, B] {
+  type R
+  def apply(a: A, b: B): R
 }
 
 object Add {
-  def create[L, R](f: (L, R) => L) = new Add[L, R] {
-    override def apply(l: L, r: R) = f(l, r)
+  type Aux[A, B, C] = Add[A, B] { type R = C }
+  def of[A, B, C](f: (A, B) => C): Aux[A, B, C] = new Add[A, B] {
+    type R = C
+
+    override def apply(a: A, b: B): C = f(a, b)
   }
 
-  implicit val ldp: Add[LocalDate, Period]        = create[LocalDate, Period](_ plus _)
-  implicit val ldtp: Add[LocalDateTime, Period]   = create[LocalDateTime, Period](_ plus _)
-  implicit val ldtd: Add[LocalDateTime, Duration] = create[LocalDateTime, Duration](_ plus _)
-  implicit val ltd: Add[LocalTime, Duration]      = create[LocalTime, Duration](_ plus _)
-  implicit val zdtp: Add[ZonedDateTime, Period]   = create[ZonedDateTime, Period](_ plus _)
-  implicit val zdtd: Add[ZonedDateTime, Duration] = create[ZonedDateTime, Duration](_ plus _)
-  implicit val pp: Add[Period, Period]            = create[Period, Period](_ plus _)
-  implicit val dd: Add[Duration, Duration]        = create[Duration, Duration](_ plus _)
+  implicit val ldp: Aux[LocalDate, Period, LocalDate]            = of(_ plus _)
+  implicit val ldtp: Aux[LocalDateTime, Period, LocalDateTime]   = of(_ plus _)
+  implicit val ldtd: Aux[LocalDateTime, Duration, LocalDateTime] = of(_ plus _)
+  implicit val ltd: Aux[LocalTime, Duration, LocalTime]          = of(_ plus _)
+  implicit val zdtp: Aux[ZonedDateTime, Period, ZonedDateTime]   = of(_ plus _)
+  implicit val zdtd: Aux[ZonedDateTime, Duration, ZonedDateTime] = of(_ plus _)
+  implicit val pp: Aux[Period, Period, Period]                   = of(_ plus _)
+  implicit val dd: Aux[Duration, Duration, Duration]             = of(_ plus _)
+
+  implicit def commutativeAdd[A, B](implicit ev: Aux[A, B, A]): Aux[B, A, A] = of[B, A, A]((b, a) => ev(a, b))
 }

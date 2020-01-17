@@ -8,7 +8,7 @@ case class TimeRange[T: Ordering, S: Multiply](
   step: S,
   inclusive: Boolean
 )(
-  implicit add: Add[T, S]
+  implicit add: Add.Aux[T, S, T]
 ) extends Seq[T] {
   override def apply(idx: Int): T = {
     val res = start + step * idx
@@ -32,7 +32,7 @@ case class TimeRange[T: Ordering, S: Multiply](
     s"TimeRange($content$more)"
   }
 
-  def by[P: Multiply](step: P)(implicit add: Add[T, P]): TimeRange[T, P] = {
+  def by[P: Multiply](step: P)(implicit add: Add.Aux[T, P, T]): TimeRange[T, P] = {
     TimeRange(start, end, step, inclusive)
   }
 }

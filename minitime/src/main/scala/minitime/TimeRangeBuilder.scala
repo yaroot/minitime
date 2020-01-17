@@ -6,7 +6,7 @@ trait TimeRangeBuilder[T, S] {
 
 object TimeRangeBuilder {
   def create[T: Ordering, S: Multiply](defaultStep: S)(
-    implicit add: Add[T, S]
+    implicit add: Add.Aux[T, S, T]
   ) = {
     new TimeRangeBuilder[T, S] {
       override def build(start: T, end: T, inclusive: Boolean) = {

@@ -37,7 +37,7 @@ package object minitime {
   }
 
   implicit class Infix[L](val l: L) extends AnyVal {
-    def +[R](r: R)(implicit add: Add[L, R]): L                 = add(l, r)
+    def +[R](r: R)(implicit add: Add[L, R]): add.R             = add(l, r)
     def -[R, C](r: R)(implicit subtract: Subtract[L, R, C]): C = subtract(l, r)
     def *(scalar: Int)(implicit multiply: Multiply[L]): L      = multiply(l, scalar)
     def /[R, C](r: R)(implicit divide: Divide[L, R, C]): C     = divide(l, r)
