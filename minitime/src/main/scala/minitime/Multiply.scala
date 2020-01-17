@@ -9,6 +9,6 @@ object Multiply {
     override def apply(a: A, scalar: Int) = f(a, scalar)
   }
 
-  implicit val p = create[Period](_ multipliedBy _)
-  implicit val d = create[Duration](_ multipliedBy _)
+  implicit val p: Multiply[Period]   = create[Period](_ multipliedBy _)
+  implicit val d: Multiply[Duration] = create[Duration](_ multipliedBy _)
 }

@@ -53,12 +53,10 @@ package object minitime {
     Ordering.Implicits.infixOrderingOps(x)
   }
 
-  def orderingOf[T](f: (T, T) => Int) = new Ordering[T] {
-    override def compare(x: T, y: T): Int = f(x, y)
-  }
-  implicit val localDateOrdering     = orderingOf[LocalDate](_ compareTo _)
-  implicit val localDateTimeOrdering = orderingOf[LocalDateTime](_ compareTo _)
-  implicit val localTimeOrdering     = orderingOf[LocalTime](_ compareTo _)
-  implicit val zonedDateTimeOrdering = orderingOf[ZonedDateTime](_ compareTo _)
-  implicit val durationOrdering      = orderingOf[Duration](_ compareTo _)
+  def orderingOf[T](f: (T, T) => Int): Ordering[T]            = (x: T, y: T) => f(x, y)
+  implicit val localDateOrdering: Ordering[LocalDate]         = orderingOf[LocalDate](_ compareTo _)
+  implicit val localDateTimeOrdering: Ordering[LocalDateTime] = orderingOf[LocalDateTime](_ compareTo _)
+  implicit val localTimeOrdering: Ordering[LocalTime]         = orderingOf[LocalTime](_ compareTo _)
+  implicit val zonedDateTimeOrdering: Ordering[ZonedDateTime] = orderingOf[ZonedDateTime](_ compareTo _)
+  implicit val durationOrdering: Ordering[Duration]           = orderingOf[Duration](_ compareTo _)
 }

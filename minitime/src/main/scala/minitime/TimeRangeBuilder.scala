@@ -15,8 +15,8 @@ object TimeRangeBuilder {
     }
   }
 
-  implicit val ld  = create[LocalDate, Period](1.day)
-  implicit val ldt = create[LocalDateTime, Duration](1.second)
-  implicit val lt  = create[LocalTime, Duration](1.second)
-  implicit val zdt = create[ZonedDateTime, Duration](1.second)
+  implicit val ld: TimeRangeBuilder[LocalDate, Period]        = create[LocalDate, Period](1.day)
+  implicit val ldt: TimeRangeBuilder[LocalDateTime, Duration] = create[LocalDateTime, Duration](1.second)
+  implicit val lt: TimeRangeBuilder[LocalTime, Duration]      = create[LocalTime, Duration](1.second)
+  implicit val zdt: TimeRangeBuilder[ZonedDateTime, Duration] = create[ZonedDateTime, Duration](1.second)
 }

@@ -9,7 +9,7 @@ object Divide {
     override def apply(l: L, r: R): C = f(l, r)
   }
 
-  implicit val di = create((l: Duration, r: Int) => l dividedBy r)
+  implicit val di: Divide[Duration, Int, Duration] = create((l: Duration, r: Int) => l dividedBy r)
   // Not available in Java 8
   // implicit val dd = create((l: Duration, r: Duration) => l dividedBy r)
 }
